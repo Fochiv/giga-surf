@@ -79,4 +79,7 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 <?php endif; ?>
+<a class="support-float" href="https://wa.me/237678519844?text=Bonjour%20Giga%20Surf%2C%20j%E2%80%99ai%20besoin%20d%E2%80%99aide." target="_blank" rel="noopener noreferrer" aria-label="Contacter l’assistance Giga Surf sur WhatsApp au +237 678 51 98 44" title="WhatsApp : +237 678 51 98 44">
+  <?= giga_svg('headset') ?><span data-fr="Assistance" data-en="Help">Assistance</span>
+</a>
 <?php require __DIR__ . '/includes/footer.php'; ?>

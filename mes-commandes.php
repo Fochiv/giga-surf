@@ -84,7 +84,7 @@ require __DIR__ . '/includes/header.php';
     <div class="summary-item"><span data-fr="Paiement" data-en="Payment">Paiement</span><strong><span data-fr="<?= h($paymentLabels[0]) ?>" data-en="<?= h($paymentLabels[1]) ?>"><?= h($paymentLabels[0]) ?></span></strong></div>
     <div class="summary-item"><span data-fr="Livraison" data-en="Delivery">Livraison</span><strong><span data-fr="<?= h($deliveryLabels[0]) ?>" data-en="<?= h($deliveryLabels[1]) ?>"><?= h($deliveryLabels[0]) ?></span></strong></div>
     <?php if ($order['payment_status'] === 'SUCCESSFUL' && $order['delivery_status'] !== 'delivered'): ?>
-      <p class="safe-note"><?= giga_svg('clock') ?><span data-fr="Votre paiement est confirmé. Le vendeur va effectuer le rechargement et mettre à jour ce suivi." data-en="Your payment is confirmed. The seller will top up the number and update this status.">Votre paiement est confirmé. Le vendeur va effectuer le rechargement et mettre à jour ce suivi.</span></p>
+      <p class="safe-note"><?= giga_svg('clock') ?><span data-fr="Votre paiement est confirmé. Votre commande est en cours de traitement." data-en="Your payment is confirmed. Your order is being processed.">Votre paiement est confirmé. Votre commande est en cours de traitement.</span></p>
     <?php elseif (!in_array($order['payment_status'], ['SUCCESSFUL', 'FAILED', 'EXPIRED'], true) && !empty($order['fapshi_trans_id'])): ?>
       <form method="post" action="<?= h(url('verify-payment.php')) ?>" class="track-refresh">
         <?= csrf_field() ?><input type="hidden" name="order_id" value="<?= (int) $order['id'] ?>">

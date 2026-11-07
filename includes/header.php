@@ -17,7 +17,8 @@ if (!function_exists('giga_svg')) {
             'check' => '<path d="m5 12 4 4L19 6"/>',
             'search' => '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
             'lock' => '<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
-            'wifi' => '<path d="M5 9a11 11 0 0 1 14 0M8 12a7 7 0 0 1 8 0m-5 4h.01"/><circle cx="12" cy="19" r="1"/>'
+            'wifi' => '<path d="M5 9a11 11 0 0 1 14 0M8 12a7 7 0 0 1 8 0m-5 4h.01"/><circle cx="12" cy="19" r="1"/>',
+            'headset' => '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M5 14h2v6H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2Zm14 0h-2v6h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2Z"/><path d="M17 20a5 5 0 0 1-5 2h-1"/>'
         ];
         return '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24">'.$icons[$name].'</svg>';
     }
@@ -39,7 +40,6 @@ if (!function_exists('giga_svg')) {
   <div class="shell header-inner">
     <a class="brand" href="<?= h(url('index.php')) ?>" aria-label="Giga Surf — accueil">
       <img src="<?= h(url('logo-giga-surf.png')) ?>" alt="Giga Surf">
-      <span class="brand-word">Giga <span>Surf</span></span>
     </a>
     <nav class="main-nav" aria-label="Navigation principale">
       <a class="<?= $currentPage === 'home' ? 'active' : '' ?>" href="<?= h(url('index.php')) ?>" data-fr="Accueil" data-en="Home">Accueil</a>
