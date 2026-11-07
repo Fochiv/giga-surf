@@ -24,4 +24,4 @@ if (!$orderIds) {
 
 $_SESSION['tracked_phone'] = $phone;
 $_SESSION['tracked_order_id'] = $orderIds[0];
-redirect('mes-commandes.php');
+redirect('mes-commandes.php#order-results');

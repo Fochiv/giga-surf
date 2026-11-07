@@ -20,11 +20,13 @@ $appBaseUrl = rtrim((string) ($localConfig['base_url'] ?? getenv('APP_BASE_URL')
 $dbConfig = $localConfig['db'] ?? [];
 $dbDriver = (string) ($dbConfig['driver'] ?? getenv('DB_DRIVER') ?: ($isReplit ? 'sqlite' : 'mysql'));
 $fapshiConfig = $localConfig['fapshi'] ?? [];
+$fapshiBaseUrl = rtrim((string) ($fapshiConfig['base_url'] ?? getenv('FAPSHI_BASE_URL') ?: 'https://sandbox.fapshi.com'), '/');
+$fapshiLive = parse_url($fapshiBaseUrl, PHP_URL_HOST) === 'live.fapshi.com';
 $fapshiConfig = [
-    'apiuser' => (string) ($fapshiConfig['apiuser'] ?? getenv('FAPSHI_API_USER') ?: ''),
-    'apikey' => (string) ($fapshiConfig['apikey'] ?? getenv('FAPSHI_API_KEY') ?: ''),
-    'webhook_secret' => (string) ($fapshiConfig['webhook_secret'] ?? getenv('FAPSHI_WEBHOOK_SECRET') ?: ''),
-    'base_url' => rtrim((string) ($fapshiConfig['base_url'] ?? getenv('FAPSHI_BASE_URL') ?: 'https://sandbox.fapshi.com'), '/'),
+    'apiuser' => (string) ($fapshiConfig['apiuser'] ?? getenv($fapshiLive ? 'FAPSHI_LIVE_API_USER' : 'FAPSHI_API_USER') ?: ''),
+    'apikey' => (string) ($fapshiConfig['apikey'] ?? getenv($fapshiLive ? 'FAPSHI_LIVE_API_KEY' : 'FAPSHI_API_KEY') ?: ''),
+    'webhook_secret' => (string) ($fapshiConfig['webhook_secret'] ?? getenv($fapshiLive ? 'FAPSHI_LIVE_WEBHOOK_SECRET' : 'FAPSHI_WEBHOOK_SECRET') ?: ''),
+    'base_url' => $fapshiBaseUrl,
 ];
 
 if (PHP_SAPI !== 'cli') {

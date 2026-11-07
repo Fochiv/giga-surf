@@ -3,13 +3,19 @@ require_once __DIR__ . '/includes/bootstrap.php';
 global $isDevelopment;
 $salesPaused = false;
 $notice = '';
+$supportWhatsapp = '237678519844';
 $publicReviews = [];
 try {
-    $settingStmt = db()->prepare('SELECT setting_key, setting_value FROM settings WHERE setting_key IN (?, ?, ?)');
-    $settingStmt->execute(['sales_paused', 'notice_fr', 'notice_en']);
+    $settingStmt = db()->prepare('SELECT setting_key, setting_value FROM settings WHERE setting_key IN (?, ?, ?, ?)');
+    $settingStmt->execute(['sales_paused', 'notice_fr', 'notice_en', 'support_whatsapp']);
     foreach ($settingStmt->fetchAll() as $setting) {
         if ($setting['setting_key'] === 'sales_paused') $salesPaused = $setting['setting_value'] === '1';
         if ($setting['setting_key'] === (currentLanguage() === 'en' ? 'notice_en' : 'notice_fr')) $notice = (string) $setting['setting_value'];
+        if ($setting['setting_key'] === 'support_whatsapp') {
+            $digits = preg_replace('/\D+/', '', (string) $setting['setting_value']) ?? '';
+            if (str_starts_with($digits, '237')) $digits = substr($digits, 3);
+            if (validCameroonPhone($digits)) $supportWhatsapp = '237' . $digits;
+        }
     }
     $publicReviews = db()->query('SELECT customer_name, rating, body, created_at FROM reviews WHERE visible = 1 ORDER BY created_at DESC LIMIT 3')->fetchAll();
 } catch (Throwable $e) {
@@ -79,7 +85,7 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 <?php endif; ?>
-<a class="support-float" href="https://wa.me/237678519844?text=Bonjour%20Giga%20Surf%2C%20j%E2%80%99ai%20besoin%20d%E2%80%99aide." target="_blank" rel="noopener noreferrer" aria-label="Contacter l’assistance Giga Surf sur WhatsApp au +237 678 51 98 44" title="WhatsApp : +237 678 51 98 44">
-  <?= giga_svg('headset') ?><span data-fr="Assistance" data-en="Help">Assistance</span>
+<a class="support-float" href="https://wa.me/<?= h($supportWhatsapp) ?>?text=Bonjour%20Giga%20Surf%2C%20j%E2%80%99ai%20besoin%20d%E2%80%99aide." target="_blank" rel="noopener noreferrer" aria-label="Contacter l’assistance Giga Surf sur WhatsApp" title="WhatsApp">
+  <?= giga_svg('headset') ?>
 </a>
 <?php require __DIR__ . '/includes/footer.php'; ?>

@@ -21,6 +21,13 @@ if (validCameroonPhone($trackedPhone)) {
     $stmt->execute([$trackedPhone]);
     $orders = $stmt->fetchAll();
 }
+$pollingOrderIds = [];
+foreach ($orders as $trackedOrder) {
+    if (in_array(strtoupper((string) $trackedOrder['payment_status']), ['CREATED', 'PENDING', 'UNKNOWN'], true)
+        && !empty($trackedOrder['fapshi_trans_id']) && count($pollingOrderIds) < 3) {
+        $pollingOrderIds[(int) $trackedOrder['id']] = true;
+    }
+}
 
 $statusLabels = [
     'pending' => ['En attente de paiement', 'Awaiting payment', 'pending'],
@@ -54,7 +61,7 @@ require __DIR__ . '/includes/header.php';
   </aside>
 </section>
 <?php if ($orders): ?>
-<section class="shell order-track-section" aria-live="polite">
+<section class="shell order-track-section" id="order-results" aria-live="polite">
   <div class="section-heading tracking-heading">
     <div><span class="eyebrow" data-fr="Suivi" data-en="Tracking">Suivi</span><h2 data-fr="<?= count($orders) ?> commande(s) trouvée(s)" data-en="<?= count($orders) ?> order(s) found"><?= count($orders) ?> commande(s) trouvée(s)</h2></div>
   </div>
@@ -73,7 +80,7 @@ require __DIR__ . '/includes/header.php';
         ? ['Livré', 'Delivered']
         : ['En attente de livraison', 'Awaiting delivery'];
   ?>
-  <article class="order-result">
+  <article class="order-result" <?= isset($pollingOrderIds[(int) $order['id']]) ? 'data-auto-payment="' . (int) $order['id'] . '" data-poll-csrf="' . h(csrfToken()) . '"' : '' ?>>
     <div class="order-result-head">
       <div><h2 data-fr="Commande" data-en="Order">Commande</h2><span class="order-ref"><?= h($order['public_code']) ?></span></div>
       <span class="status <?= h($displayStatus[2]) ?>"><span data-fr="<?= h($displayStatus[0]) ?>" data-en="<?= h($displayStatus[1]) ?>"><?= h($displayStatus[0]) ?></span></span>
@@ -82,7 +89,7 @@ require __DIR__ . '/includes/header.php';
     <div class="summary-item"><span data-fr="Numéro à recharger" data-en="Top-up number">Numéro à recharger</span><strong><?= h($order['recipient_phone']) ?></strong></div>
     <div class="summary-item"><span data-fr="Montant" data-en="Amount">Montant</span><strong><?= h(formatXaf($order['amount'])) ?></strong></div>
     <div class="summary-item"><span data-fr="Paiement" data-en="Payment">Paiement</span><strong><span data-fr="<?= h($paymentLabels[0]) ?>" data-en="<?= h($paymentLabels[1]) ?>"><?= h($paymentLabels[0]) ?></span></strong></div>
-    <div class="summary-item"><span data-fr="Livraison" data-en="Delivery">Livraison</span><strong><span data-fr="<?= h($deliveryLabels[0]) ?>" data-en="<?= h($deliveryLabels[1]) ?>"><?= h($deliveryLabels[0]) ?></span></strong></div>
+    <div class="summary-item"><span data-fr="Livraison" data-en="Delivery">Livraison</span><strong><span class="delivery-state <?= $order['delivery_status'] === 'delivered' ? 'delivered' : 'waiting' ?>" data-fr="<?= h($deliveryLabels[0]) ?>" data-en="<?= h($deliveryLabels[1]) ?>"><?= h($deliveryLabels[0]) ?></span></strong></div>
     <?php if ($order['payment_status'] === 'SUCCESSFUL' && $order['delivery_status'] !== 'delivered'): ?>
       <p class="safe-note"><?= giga_svg('clock') ?><span data-fr="Votre paiement est confirmé. Votre commande est en cours de traitement." data-en="Your payment is confirmed. Your order is being processed.">Votre paiement est confirmé. Votre commande est en cours de traitement.</span></p>
     <?php elseif (!in_array($order['payment_status'], ['SUCCESSFUL', 'FAILED', 'EXPIRED'], true) && !empty($order['fapshi_trans_id'])): ?>

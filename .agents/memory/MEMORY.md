@@ -1,1 +1,2 @@
 - [Giga Surf fulfillment](giga-surf-fulfillment.md) — Admin manually recharges after payment confirmation, then marks the order delivered for customer tracking.
+- [Giga Surf support contact](giga-surf-support-contact.md) — The owner wants the public WhatsApp support number editable from Admin.

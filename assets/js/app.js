@@ -63,7 +63,9 @@
     "Configurez l’URL webhook de Fapshi avec l’adresse de ce site suivie de":"Set the Fapshi webhook URL to this site's address followed by",
     "Documentation des webhooks":"Webhook documentation","Identifiant ou mot de passe incorrect.":"Incorrect username or password.",
     "Trop de tentatives. Réessayez dans 15 minutes.":"Too many attempts. Try again in 15 minutes.",
-    "Vous êtes déconnecté.":"You have signed out.","Paiement confirmé":"Payment confirmed",
+    "Vous êtes déconnecté.":"You have signed out.","Numéro WhatsApp de l’assistance":"Support WhatsApp number",
+    "Format accepté : numéro camerounais, avec ou sans indicatif +237.":"Accepted format: Cameroon number, with or without the +237 prefix.",
+    "Saisissez un numéro WhatsApp camerounais valide.":"Enter a valid Cameroon WhatsApp number.","Paiement confirmé":"Payment confirmed",
     "Paiement échoué":"Payment failed","Paiement expiré":"Payment expired","Paiement en attente":"Payment pending",
     "Vérification requise":"Verification required","Connectez-vous pour accéder à l’espace admin.":"Sign in to access the admin area."
   };
@@ -184,4 +186,79 @@
   numberInputs.forEach(function (input) {
     input.addEventListener('input', function () { input.value = input.value.replace(/[^\d+ ]/g, '').slice(0, 16); });
   });
+
+  var menuToggle = document.querySelector('[data-admin-menu-toggle]');
+  var adminDrawer = document.querySelector('.admin-sidebar');
+  var menuBackdrop = document.querySelector('.admin-menu-backdrop');
+  if (menuToggle && adminDrawer && menuBackdrop) {
+    var closeMenu = function () {
+      adminDrawer.setAttribute('aria-hidden', 'true');
+      adminDrawer.inert = true;
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuBackdrop.hidden = true;
+      document.body.classList.remove('admin-menu-open');
+    };
+    menuToggle.addEventListener('click', function () {
+      var open = menuToggle.getAttribute('aria-expanded') !== 'true';
+      adminDrawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      adminDrawer.inert = !open;
+      menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menuBackdrop.hidden = !open;
+      document.body.classList.toggle('admin-menu-open', open);
+      if (open) {
+        var firstLink = adminDrawer.querySelector('.admin-nav a');
+        if (firstLink) firstLink.focus();
+      }
+    });
+    document.querySelectorAll('[data-admin-menu-close]').forEach(function (button) {
+      button.addEventListener('click', closeMenu);
+    });
+    adminDrawer.querySelectorAll('.admin-nav a').forEach(function (link) {
+      link.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        menuToggle.focus();
+      }
+    });
+  }
+
+  var pendingPaymentCards = Array.prototype.slice.call(document.querySelectorAll('[data-auto-payment]'));
+  if (pendingPaymentCards.length) {
+    var paymentPollInProgress = false;
+    var paymentCompleted = false;
+    var pollPendingPayments = function () {
+      if (paymentPollInProgress || paymentCompleted || document.visibilityState === 'hidden') return;
+      paymentPollInProgress = true;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('[data-auto-payment]'));
+      var sequence = Promise.resolve();
+      cards.forEach(function (card) {
+        sequence = sequence.then(function () {
+          if (paymentCompleted) return;
+          var body = new URLSearchParams({
+            order_id: card.getAttribute('data-auto-payment') || '',
+            csrf_token: card.getAttribute('data-poll-csrf') || ''
+          });
+          return fetch('auto-refresh-payment.php', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: body.toString()
+          }).then(function (response) {
+            if (!response.ok) return null;
+            return response.json();
+          }).then(function (result) {
+            if (result && result.ok && result.terminal) {
+              paymentCompleted = true;
+              window.location.reload();
+            }
+          }).catch(function () {});
+        });
+      });
+      sequence.finally(function () { paymentPollInProgress = false; });
+    };
+    pollPendingPayments();
+    window.setInterval(pollPendingPayments, 15000);
+  }
 })();

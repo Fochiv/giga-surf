@@ -20,13 +20,6 @@ $paid = $metric('2000-01-01 00:00:00');
 $day = $metric($today);
 $weekMetric = $metric($week);
 $monthMetric = $metric($month);
-$balance = null;
-if (fapshi()->isConfigured()) {
-    $balanceResponse = fapshi()->balance();
-    if (($balanceResponse['statusCode'] ?? 0) === 200 && isset($balanceResponse['balance'])) {
-        $balance = formatXaf($balanceResponse['balance']);
-    }
-}
 $operatorRevenue = db()->query("SELECT operator, COUNT(*) AS count, SUM(amount) AS revenue FROM orders WHERE payment_status = 'SUCCESSFUL' GROUP BY operator ORDER BY revenue DESC")->fetchAll();
 $popularPackages = db()->query("SELECT package_name, operator, COUNT(*) AS count, SUM(amount) AS revenue FROM orders WHERE payment_status = 'SUCCESSFUL' GROUP BY package_name, operator ORDER BY count DESC, revenue DESC LIMIT 5")->fetchAll();
 $statusCounts = db()->query('SELECT payment_status, COUNT(*) AS count FROM orders GROUP BY payment_status ORDER BY count DESC')->fetchAll();
@@ -34,7 +27,6 @@ $recentOrders = db()->query('SELECT * FROM orders ORDER BY created_at DESC LIMIT
 adminHeader('Vue d’ensemble', 'dashboard');
 ?>
 <section class="admin-stat-grid">
-    <article class="admin-stat-card"><span>Solde Fapshi</span><strong><?= h($balance ?? 'À configurer') ?></strong><small><?= $balance === null ? 'Ajoutez les identifiants renouvelés pour afficher le solde.' : 'Service de collecte' ?></small></article>
     <article class="admin-stat-card"><span>Revenus bruts</span><strong><?= h(formatXaf($paid['gross'])) ?></strong><small>Tous les paiements confirmés</small></article>
     <article class="admin-stat-card"><span>Revenu net estimé</span><strong><?= h(formatXaf($paid['net'])) ?></strong><small>Après frais Fapshi estimés</small></article>
     <article class="admin-stat-card"><span>Commandes totales</span><strong><?= h($totalOrders) ?></strong><small><?= h($pendingOrders) ?> paiement(s) en attente</small></article>

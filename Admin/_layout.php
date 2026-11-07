@@ -12,6 +12,8 @@ function adminIcon(string $name): string
         'logout' => '<path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7"/>',
         'arrow' => '<path d="M5 12h14M13 6l6 6-6 6"/>',
         'check' => '<path d="m5 12 4 4L19 6"/>',
+        'menu' => '<path d="M4 6h16M4 12h16M4 18h16"/>',
+        'close' => '<path d="m6 6 12 12M18 6 6 18"/>',
     ];
     return '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . ($paths[$name] ?? '') . '</svg>';
 }
@@ -34,9 +36,13 @@ function adminHeader(string $title, string $active = '', bool $loginPage = false
     <body class="admin-body">
     <?php if (!$loginPage): ?>
         <div class="admin-shell">
-            <aside class="admin-sidebar">
-                <a class="admin-brand" href="index.php"><img src="../logo-giga-surf.png" alt="" /><span>Giga Surf <small>ADMIN</small></span></a>
-        <nav class="admin-nav" aria-label="Navigation administrateur">
+            <button class="admin-menu-backdrop" type="button" data-admin-menu-close aria-label="Fermer le menu" hidden></button>
+            <aside class="admin-sidebar" id="admin-navigation" aria-hidden="true" inert>
+                <div class="admin-drawer-heading">
+                    <a class="admin-brand" href="index.php"><img src="../logo-giga-surf.png" alt="" /><span>Giga Surf <small>ADMIN</small></span></a>
+                    <button class="admin-menu-close" type="button" data-admin-menu-close aria-label="Fermer le menu"><?= adminIcon('close') ?></button>
+                </div>
+                <nav class="admin-nav" aria-label="Navigation administrateur">
                     <?php foreach (adminNav($active) as $file => $item): ?>
                         <a class="<?= $item['active'] ? 'active' : '' ?>" href="<?= h($file) ?>">
                             <?= adminIcon($item['icon']) ?><span data-fr="<?= h($item['label']) ?>" data-en="<?= h(['Vue d’ensemble' => 'Overview', 'Commandes' => 'Orders', 'Forfaits' => 'Bundles', 'Avis clients' => 'Customer reviews', 'Paramètres' => 'Settings'][$item['label']] ?? $item['label']) ?>"><?= h($item['label']) ?></span>
@@ -51,7 +57,11 @@ function adminHeader(string $title, string $active = '', bool $loginPage = false
             <main class="admin-main">
                 <header class="admin-topbar">
                     <div><span class="admin-eyebrow" data-fr="ESPACE DE GESTION" data-en="ADMIN WORKSPACE">ESPACE DE GESTION</span><h1><?= h($title) ?></h1></div>
-                    <div class="admin-top-actions"><div class="language-toggle" role="group" aria-label="Choisir la langue"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div><a class="admin-view-site" href="../index.php" target="_blank" rel="noopener"><span data-fr="Voir le site" data-en="View website">Voir le site</span> <?= adminIcon('arrow') ?></a></div>
+                    <div class="admin-top-actions">
+                        <button class="admin-menu-toggle" type="button" data-admin-menu-toggle aria-expanded="false" aria-controls="admin-navigation"><?= adminIcon('menu') ?><span data-fr="Menu" data-en="Menu">Menu</span></button>
+                        <div class="language-toggle" role="group" aria-label="Choisir la langue"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+                        <a class="admin-view-site" href="../index.php" target="_blank" rel="noopener"><span data-fr="Voir le site" data-en="View website">Voir le site</span> <?= adminIcon('arrow') ?></a>
+                    </div>
                 </header>
                 <?php foreach ($flashItems as $message): ?>
                     <div class="admin-alert <?= h($message['type']) ?>" role="status"><?= h($message['message']) ?></div>
