@@ -108,5 +108,9 @@ if ($status === 'UNKNOWN') {
     redirect('mes-commandes.php');
 }
 error_log('Direct payment initiation rejected by provider (HTTP ' . $statusCode . ').');
+if ($statusCode === 403) {
+    flash('error', 'Le service a refusé le démarrage du paiement. Vérifiez que le paiement direct est autorisé en mode Live pour ce service.');
+    redirect('commande.php?forfait=' . (int) $package['id']);
+}
 flash('error', 'Le paiement n’a pas pu démarrer. Vérifiez le numéro Mobile Money et réessayez avec une nouvelle commande.');
 redirect('commande.php?forfait=' . (int) $package['id']);

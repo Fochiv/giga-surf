@@ -5,6 +5,8 @@ description: Product rule for separating the bundle operator from the payment ne
 
 Customers may pay for a bundle from any telecom operator using either Orange Money or MTN Mobile Money; the bundle network and payer's payment network are independent.
 
-**Why:** the user explicitly wants customers to choose any supported payment network regardless of which operator's bundle they buy.
+Fapshi Live Direct Pay activation is separate from webhook setup; a configured webhook does not grant permission to initiate Live direct payments.
 
-**How to apply:** Keep the bundle operator for fulfillment, and send the separately selected payment network to the payment provider.
+**Why:** the user wants a choice of payment network independent of bundle operator. Fapshi's documentation states that Live Direct Pay is disabled by default and needs provider approval.
+
+**How to apply:** Keep the bundle operator for fulfillment and send the selected payment network to the payment provider. If Live Direct Pay returns HTTP 403, verify the Live service authorization and credentials; do not assume the webhook configuration controls payment initiation.

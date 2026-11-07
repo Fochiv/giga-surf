@@ -52,7 +52,9 @@ adminHeader('Paramètres', 'settings');
         <div class="admin-panel-heading"><div><span class="admin-eyebrow">PAIEMENTS</span><h2>Connexion Fapshi</h2></div></div>
         <div class="admin-connection-state <?= $fapshiReady ? 'connected' : 'disconnected' ?>"><span class="connection-dot"></span><div><strong><?= $fapshiReady ? 'Identifiants configurés' : 'Identifiants manquants' ?></strong><small><?= $fapshiReady ? 'Les demandes de paiement peuvent être envoyées.' : 'Les paiements resteront désactivés tant que les nouvelles clés ne sont pas ajoutées aux Secrets Replit.' ?></small></div></div>
         <p class="admin-muted">Les identifiants API et le secret webhook sont chargés depuis la configuration serveur et ne sont jamais affichés ici.</p>
-        <ol class="admin-setup-list"><li>Renouvelez les identifiants API dans votre espace Fapshi.</li><li>Ajoutez les nouvelles valeurs dans les Secrets Replit, ou dans un fichier de configuration privé sur Hostinger.</li><li>Configurez l’URL webhook de Fapshi avec l’adresse de ce site suivie de <code>/webhook.php</code>.</li></ol>
+        <p class="admin-muted">Des identifiants configurés ne signifient pas que Direct Pay est autorisé en Live. Le webhook n’active pas cette option.</p>
+        <ol class="admin-setup-list"><li>Utilisez les identifiants du service Live dans les Secrets Replit ou la configuration privée Hostinger.</li><li>Demandez à Fapshi d’activer Direct Pay pour ce service Live.</li><li>Configurez l’URL webhook de ce site suivie de <code>/webhook.php</code> et son secret.</li><li>Ne partagez jamais votre API Key.</li></ol>
+        <a class="admin-secondary-button inline-button" href="https://www.fapshi.com/fr/aide-et-support/how-to-activate-direct-pay-for-your-fapshi-api" target="_blank" rel="noopener">Guide d’activation Direct Pay</a>
         <a class="admin-secondary-button inline-button" href="https://docs.fapshi.com/fr/api-reference/endpoint/webhook" target="_blank" rel="noopener">Documentation des webhooks</a>
     </article>
 </section>

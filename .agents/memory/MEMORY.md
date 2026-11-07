@@ -1,3 +1,3 @@
 - [Giga Surf fulfillment](giga-surf-fulfillment.md) — Admin manually recharges after payment confirmation, then marks the order delivered for customer tracking.
 - [Giga Surf support contact](giga-surf-support-contact.md) — The owner wants the public WhatsApp support number editable from Admin.
-- [Giga Surf payment networks](giga-surf-payment-networks.md) — The payer may use MTN or Orange Money regardless of the bundle operator.
+- [Giga Surf payment networks](giga-surf-payment-networks.md) — Payer network is independent of bundle operator; Live Direct Pay needs separate provider activation.
