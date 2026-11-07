@@ -1,6 +1,92 @@
 (function () {
   'use strict';
   var lang = localStorage.getItem('giga-language') || 'fr';
+  var adminTranslations = {
+    "ESPACE DE GESTION":"ADMIN WORKSPACE","Administrateur":"Administrator",
+    "Créer votre accès sécurisé":"Create your secure access","PREMIÈRE CONFIGURATION":"FIRST-TIME SETUP",
+    "Ce formulaire disparaîtra après la création du premier compte administrateur.":"This form disappears after the first administrator account is created.",
+    "Identifiant":"Username","Nouveau mot de passe":"New password","Confirmer le mot de passe":"Confirm password",
+    "Créer le compte admin":"Create admin account","Retour au site":"Back to website","ESPACE SÉCURISÉ":"SECURE AREA",
+    "Bon retour":"Welcome back","Connectez-vous pour gérer les forfaits et les commandes.":"Sign in to manage bundles and orders.",
+    "Mot de passe":"Password","Se connecter":"Sign in","Vue d’ensemble":"Overview","Gestion des forfaits":"Bundle management",
+    "Commandes":"Orders","Avis clients":"Customer reviews","Paramètres":"Settings","Voir le site":"View website",
+    "Déconnexion":"Sign out","Vue d’ensemble":"Overview","Solde Fapshi":"Fapshi balance","À configurer":"Not configured",
+    "Ajoutez les identifiants renouvelés pour afficher le solde.":"Add renewed credentials to display the balance.",
+    "Service de collecte":"Collection service","Revenus bruts":"Gross revenue","Tous les paiements confirmés":"All confirmed payments",
+    "Revenu net estimé":"Estimated net revenue","Après frais Fapshi estimés":"After estimated Fapshi fees",
+    "Commandes totales":"Total orders","Commandes échouées":"Failed orders","Échecs et paiements expirés":"Failed and expired payments",
+    "AUJOURD’HUI":"TODAY","CETTE SEMAINE":"THIS WEEK","CE MOIS":"THIS MONTH","Net estimé :":"Estimated net:",
+    "VENTES CONFIRMÉES":"CONFIRMED SALES","Revenu par opérateur":"Revenue by operator",
+    "Les revenus s’afficheront après les premiers paiements confirmés.":"Revenue will appear after the first confirmed payments.",
+    "commande(s)":"order(s)","POPULARITÉ":"POPULARITY","Forfaits les plus vendus":"Top-selling bundles",
+    "Aucune vente confirmée pour le moment.":"No confirmed sales yet.","SUIVI":"TRACKING","Statut des commandes":"Order statuses",
+    "Aucune commande enregistrée.":"No orders recorded.","RACCOURCIS":"SHORTCUTS","À faire ensuite":"Next steps",
+    "Traiter les commandes payées":"Process paid orders","Mettre à jour les forfaits":"Update bundles",
+    "ACTIVITÉ RÉCENTE":"RECENT ACTIVITY","Historique des commandes":"Order history","Voir toutes":"View all",
+    "Référence":"Reference","Client":"Customer","Opérateur":"Operator","Montant":"Amount","Paiement":"Payment","Date":"Date",
+    "Connexion administrateur":"Administrator sign in","Le paiement a été vérifié auprès de Fapshi.":"Payment status verified with Fapshi.",
+    "Commande marquée comme livrée. Le client verra le nouveau statut dans son suivi.":"Order marked delivered. The customer will see the updated status in tracking.",
+    "Action impossible. Vérifiez que le paiement est confirmé avant la livraison.":"Action unavailable. Confirm payment before marking delivery.",
+    "Payées":"Paid","En attente":"Pending","Échouées":"Failed","Toutes":"All",
+    "Rechercher une commande":"Search orders","Rechercher":"Search","Référence, client, téléphone":"Reference, customer, phone",
+    "La liste principale affiche uniquement les paiements confirmés.":"The main list shows confirmed payments only.",
+    "Résultats filtrés pour la gestion des commandes.":"Filtered results for order management.",
+    "Aucune commande dans cette vue.":"No orders in this view.","Commande / client":"Order / customer","Forfait":"Bundle",
+    "Action":"Action","Référence Fapshi en attente":"Waiting for Fapshi reference","Livrer":"Mark delivered","Livré":"Delivered",
+    "Vérifier":"Verify","Gestion des forfaits":"Bundle management","MODIFICATION":"EDIT BUNDLE","NOUVELLE OFFRE":"NEW BUNDLE",
+    "Modifier le forfait":"Edit bundle","Créer un forfait":"Create a bundle","Vérifiez l’opérateur, le nom, le prix, le volume et la durée de validité.":"Check the operator, name, price, data allowance and validity.",
+    "Opérateur":"Operator","Choisir":"Choose","Nom du forfait":"Bundle name","Prix (FCFA)":"Price (XAF)",
+    "Volume / détails":"Data / details","Validité (jours)":"Validity (days)","Ordre d’affichage":"Display order",
+    "Description courte":"Short description","Enregistrer les changements":"Save changes","Annuler":"Cancel","Créer le forfait":"Create bundle",
+    "CATALOGUE":"CATALOG","forfait(s)":"bundle(s)","Aucun forfait dans le catalogue.":"No bundles in the catalog.",
+    "Actif sur le site":"Active on website","Masqué des clients":"Hidden from customers","Modifier":"Edit","Désactiver":"Deactivate",
+    "Activer":"Activate","Supprimer":"Delete","Forfait créé et activé.":"Bundle created and activated.",
+    "Forfait modifié.":"Bundle updated.","Le statut du forfait a été modifié.":"Bundle status updated.",
+    "Forfait supprimé. Les commandes gardent leur récapitulatif historique.":"Bundle deleted. Orders retain their historical details.",
+    "Avis clients":"Customer reviews","MODÉRATION":"MODERATION","NOUVEL AVIS":"NEW REVIEW","Modifier un avis":"Edit a review",
+    "Ajouter un avis":"Add a review","Vérifiez le nom, la note et le texte de l’avis.":"Check the name, rating and review text.",
+    "Nom affiché":"Display name","Note":"Rating","Avis":"Review","Publié sur le site":"Published on website",
+    "Enregistrer":"Save","Ajouter l’avis":"Add review","avis":"reviews","Les avis clients s’afficheront ici.":"Customer reviews will appear here.",
+    "Publié":"Published","À modérer":"Needs moderation","Masquer":"Hide","Publier":"Publish",
+    "Avis supprimé.":"Review deleted.","La visibilité de l’avis a été modifiée.":"Review visibility updated.",
+    "Avis modifié.":"Review updated.","Avis ajouté.":"Review added.",
+    "Paramètres":"Settings","BOUTIQUE":"STORE","Disponibilité et annonces":"Availability and announcements",
+    "Suspendre temporairement les commandes":"Temporarily pause orders","Annonce en français":"Announcement in French",
+    "Annonce en anglais":"Announcement in English","Enregistrer les paramètres":"Save settings","Paramètres enregistrés.":"Settings saved.",
+    "Les annonces sont limitées à 300 caractères.":"Announcements are limited to 300 characters.",
+    "PAIEMENTS":"PAYMENTS","Connexion Fapshi":"Fapshi connection","Identifiants configurés":"Credentials configured",
+    "Identifiants manquants":"Credentials missing","Les demandes de paiement peuvent être envoyées.":"Payment requests can be sent.",
+    "Les paiements resteront désactivés tant que les nouvelles clés ne sont pas ajoutées aux Secrets Replit.":"Payments stay disabled until the renewed keys are added to Replit Secrets.",
+    "Les identifiants API et le secret webhook sont chargés depuis la configuration serveur et ne sont jamais affichés ici.":"API credentials and the webhook secret are loaded from server configuration and never shown here.",
+    "Renouvelez les identifiants API dans votre espace Fapshi.":"Renew the API credentials in your Fapshi account.",
+    "Ajoutez les nouvelles valeurs dans les Secrets Replit, ou dans un fichier de configuration privé sur Hostinger.":"Add the new values to Replit Secrets or a private config file on Hostinger.",
+    "Configurez l’URL webhook de Fapshi avec l’adresse de ce site suivie de":"Set the Fapshi webhook URL to this site's address followed by",
+    "Documentation des webhooks":"Webhook documentation","Identifiant ou mot de passe incorrect.":"Incorrect username or password.",
+    "Trop de tentatives. Réessayez dans 15 minutes.":"Too many attempts. Try again in 15 minutes.",
+    "Vous êtes déconnecté.":"You have signed out.","Paiement confirmé":"Payment confirmed",
+    "Paiement échoué":"Payment failed","Paiement expiré":"Payment expired","Paiement en attente":"Payment pending",
+    "Vérification requise":"Verification required","Connectez-vous pour accéder à l’espace admin.":"Sign in to access the admin area."
+  };
+  var adminTranslationsBack = {};
+  Object.keys(adminTranslations).forEach(function (key) { adminTranslationsBack[adminTranslations[key]] = key; });
+  function translateAdminText(next) {
+    if (!document.body.classList.contains('admin-body')) return;
+    var translations = next === 'en' ? adminTranslations : adminTranslationsBack;
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (node) {
+      var parent = node.parentElement;
+      if (!parent || parent.closest('[data-fr][data-en]') || /^(SCRIPT|STYLE|TEXTAREA)$/i.test(parent.tagName)) return;
+      var raw = node.nodeValue;
+      var text = raw.trim();
+      if (translations[text]) node.nodeValue = raw.replace(text, translations[text]);
+    });
+    document.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(function (field) {
+      var value = field.getAttribute('placeholder');
+      if (translations[value]) field.setAttribute('placeholder', translations[value]);
+    });
+  }
   function setLanguage(next) {
     lang = next;
     localStorage.setItem('giga-language', next);
@@ -20,6 +106,7 @@
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', active ? 'true' : 'false');
     });
+    translateAdminText(next);
   }
   document.querySelectorAll('[data-lang]').forEach(function (button) {
     button.addEventListener('click', function () { setLanguage(button.getAttribute('data-lang')); });
