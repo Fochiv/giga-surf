@@ -60,7 +60,7 @@ function adminHeader(string $title, string $active = '', bool $loginPage = false
                     <div class="admin-top-actions">
                         <button class="admin-menu-toggle" type="button" data-admin-menu-toggle aria-expanded="false" aria-controls="admin-navigation"><?= adminIcon('menu') ?><span data-fr="Menu" data-en="Menu">Menu</span></button>
                         <div class="language-toggle" role="group" aria-label="Choisir la langue"><button type="button" data-lang="fr" aria-pressed="true">FR</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
-                        <a class="admin-view-site" href="../index.php" target="_blank" rel="noopener"><span data-fr="Voir le site" data-en="View website">Voir le site</span> <?= adminIcon('arrow') ?></a>
+                        <a class="admin-view-site" href="../index.php" target="_blank" rel="noopener"><span data-fr="Voir le site" data-en="View website">Voir le site</span></a>
                     </div>
                 </header>
                 <?php foreach ($flashItems as $message): ?>

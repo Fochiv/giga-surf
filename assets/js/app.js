@@ -154,8 +154,7 @@
   });
 
   var stepThree = document.querySelector('[data-admin-reveal]');
-  var adminReveal = document.querySelector('[data-admin-link]');
-  if (stepThree && adminReveal) {
+  if (stepThree) {
     var clicks = 0;
     var lastClickAt = 0;
     stepThree.addEventListener('click', function () {
@@ -163,7 +162,7 @@
       if (now - lastClickAt > 1800) clicks = 0;
       lastClickAt = now;
       clicks += 1;
-      if (clicks >= 5) adminReveal.hidden = false;
+      if (clicks >= 5) window.location.assign(stepThree.getAttribute('data-admin-url'));
     });
     stepThree.addEventListener('keydown', function (event) {
       if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); stepThree.click(); }

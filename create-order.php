@@ -83,6 +83,7 @@ $update->execute([$externalId, $userId, $now, $orderId]);
 $response = fapshi()->direct_pay([
     'amount' => (int) $package['price'],
     'phone' => $payerPhone,
+    'medium' => $paymentOperator === 'Orange Money' ? 'orange money' : 'mobile money',
     'name' => $name,
     'userId' => $userId,
     'externalId' => $externalId,
@@ -106,5 +107,6 @@ if ($status === 'UNKNOWN') {
     flash('warning', 'La réponse de paiement n’a pas pu être confirmée. Ne relancez pas le paiement avant d’avoir vérifié votre suivi.');
     redirect('mes-commandes.php');
 }
+error_log('Direct payment initiation rejected by provider (HTTP ' . $statusCode . ').');
 flash('error', 'Le paiement n’a pas pu démarrer. Vérifiez le numéro Mobile Money et réessayez avec une nouvelle commande.');
 redirect('commande.php?forfait=' . (int) $package['id']);

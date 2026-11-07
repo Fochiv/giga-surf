@@ -21,13 +21,12 @@ try {
 } catch (Throwable $e) {
     error_log('Giga Surf storefront settings load failed: ' . $e->getMessage());
 }
-$pageTitle = 'Internet mobile, simplement';
+$pageTitle = 'Accueil';
 $currentPage = 'home';
 require __DIR__ . '/includes/header.php';
 ?>
 <section class="hero">
   <div class="shell fade-in">
-    <span class="eyebrow" data-fr="Internet mobile, simplement" data-en="Mobile internet, made simple">Internet mobile, simplement</span>
     <h1 data-fr="Votre prochain <span class='accent'>giga</span> est tout près." data-en="Your next <span class='accent'>gigabyte</span> is just a tap away." data-i18n-html>Votre prochain <span class="accent">giga</span> est tout près.</h1>
     <p class="hero-copy" data-fr="Choisissez un forfait, indiquez le numéro à recharger et payez en toute simplicité. Pas de compte à créer." data-en="Choose a bundle, enter the number to top up and pay simply. No account needed.">Choisissez un forfait, indiquez le numéro à recharger et payez en toute simplicité. Pas de compte à créer.</p>
     <a class="button" href="#operateurs"><span data-fr="Trouver mon forfait" data-en="Find my bundle">Trouver mon forfait</span><?= giga_svg('arrow') ?></a>
@@ -68,9 +67,8 @@ require __DIR__ . '/includes/header.php';
     <div class="steps">
       <article class="step"><span class="step-number">1</span><div><h3 data-fr="Choisissez votre forfait" data-en="Choose your bundle">Choisissez votre forfait</h3><p data-fr="Comparez les offres Orange, MTN et Camtel Blue." data-en="Compare offers from Orange, MTN and Camtel Blue.">Comparez les offres Orange, MTN et Camtel Blue.</p></div></article>
       <article class="step"><span class="step-number">2</span><div><h3 data-fr="Indiquez le numéro" data-en="Enter the phone number">Indiquez le numéro</h3><p data-fr="Vérifiez soigneusement le numéro à recharger." data-en="Double-check the number you want to top up.">Vérifiez soigneusement le numéro à recharger.</p></div></article>
-      <article class="step reveal-target" tabindex="0" role="button" aria-label="Étape 3" data-admin-reveal><span class="step-number">3</span><div><h3 data-fr="Payez, nous livrons" data-en="Pay, then we deliver">Payez, nous livrons</h3><p data-fr="Suivez votre commande avec sa référence unique." data-en="Track your order using its unique reference.">Suivez votre commande avec sa référence unique.</p></div></article>
+      <article class="step reveal-target" tabindex="0" role="button" aria-label="Étape 3" data-admin-reveal data-admin-url="<?= h(url('Admin/login.php')) ?>"><span class="step-number">3</span><div><h3 data-fr="Payez, nous livrons" data-en="Pay, then we deliver">Payez, nous livrons</h3><p data-fr="Suivez votre commande avec sa référence unique." data-en="Track your order using its unique reference.">Suivez votre commande avec sa référence unique.</p></div></article>
     </div>
-    <div class="admin-reveal" data-admin-link hidden><a href="<?= h(url('Admin/login.php')) ?>" data-fr="Accès administrateur" data-en="Administrator access">Accès administrateur</a></div>
   </div>
 </section>
 <?php if ($publicReviews): ?>
