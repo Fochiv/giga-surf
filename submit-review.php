@@ -11,7 +11,8 @@ $body = trim((string) ($_POST['body'] ?? ''));
 $stmt = db()->prepare('SELECT * FROM orders WHERE id = ? LIMIT 1');
 $stmt->execute([(int) $orderId]);
 $order = $stmt->fetch();
-if (!$order || (int) ($_SESSION['tracked_order_id'] ?? 0) !== (int) $order['id'] || $order['delivery_status'] !== 'delivered') {
+$trackedPhone = normalizePhone((string) ($_SESSION['tracked_phone'] ?? ''));
+if (!$order || !validCameroonPhone($trackedPhone) || normalizePhone((string) $order['recipient_phone']) !== $trackedPhone || $order['delivery_status'] !== 'delivered') {
     http_response_code(403);
     exit('Cette commande ne peut pas recevoir d’avis.');
 }

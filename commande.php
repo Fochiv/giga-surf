@@ -11,7 +11,9 @@ foreach ($allPackages as $candidate) {
 $selectedPrice = (float)($selected['price'] ?? 0);
 $selectedName = $selected ? (string)($selected['name'] ?? $selected['title'] ?? $selected['data'] ?? 'Forfait') : '';
 $selectedOperator = $selected ? (string)($selected['operator'] ?? '') : '';
+global $fapshiConfig;
 $paymentConfigured = fapshi()->isConfigured();
+$sandboxPayments = str_contains(lowerText((string) ($fapshiConfig['base_url'] ?? '')), 'sandbox.fapshi.com');
 if (empty($_SESSION['checkout_token'])) {
     $_SESSION['checkout_token'] = bin2hex(random_bytes(32));
 }
@@ -52,14 +54,15 @@ require __DIR__ . '/includes/header.php';
     <div class="field">
       <label data-fr="Opérateur de paiement" data-en="Payment operator">Opérateur de paiement</label>
       <div class="radio-row">
-        <label class="radio-card"><input type="radio" name="payment_operator" value="MTN Mobile Money" required <?= ($_POST['payment_operator'] ?? '') === 'MTN Mobile Money' ? 'checked' : '' ?>> MTN MoMo</label>
-        <label class="radio-card"><input type="radio" name="payment_operator" value="Orange Money" required <?= ($_POST['payment_operator'] ?? '') === 'Orange Money' ? 'checked' : '' ?>> Orange Money</label>
+        <label class="radio-card"><input type="radio" name="payment_operator" value="MTN Mobile Money" required <?= ($_POST['payment_operator'] ?? '') === 'MTN Mobile Money' ? 'checked' : '' ?>><img src="<?= h(url('logo-mtn.png')) ?>" alt=""><span>MTN MoMo</span></label>
+        <label class="radio-card"><input type="radio" name="payment_operator" value="Orange Money" required <?= ($_POST['payment_operator'] ?? '') === 'Orange Money' ? 'checked' : '' ?>><img src="<?= h(url('logo-orange.png')) ?>" alt=""><span>Orange Money</span></label>
       </div>
-      <small data-fr="La demande Fapshi est envoyée au numéro indiqué ci-dessous. Vérifiez qu’il correspond bien à l’opérateur choisi." data-en="Fapshi sends the request to the number below. Make sure it belongs to the selected operator.">La demande Fapshi est envoyée au numéro indiqué ci-dessous. Vérifiez qu’il correspond bien à l’opérateur choisi.</small>
+      <small data-fr="La demande de paiement est envoyée au numéro indiqué ci-dessous. Vérifiez qu’il correspond bien à l’opérateur choisi." data-en="The payment request will be sent to the number below. Make sure it belongs to the selected operator.">La demande de paiement est envoyée au numéro indiqué ci-dessous. Vérifiez qu’il correspond bien à l’opérateur choisi.</small>
     </div>
-    <div class="field"><label for="payment_number" data-fr="Numéro utilisé pour le paiement" data-en="Payment phone number">Numéro utilisé pour le paiement</label><input id="payment_number" name="payer_phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[+0-9 ]{9,16}" maxlength="16" value="<?= h($_POST['payer_phone'] ?? '') ?>" placeholder="6XX XXX XXX"><small data-fr="Fapshi enverra la demande sur ce numéro. Gardez le téléphone à portée de main." data-en="Fapshi will send the payment request to this number. Keep your phone nearby.">Fapshi enverra la demande sur ce numéro. Gardez le téléphone à portée de main.</small></div>
+    <div class="field"><label for="payment_number" data-fr="Numéro utilisé pour le paiement" data-en="Payment phone number">Numéro utilisé pour le paiement</label><input id="payment_number" name="payer_phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[+0-9 ]{9,16}" maxlength="16" value="<?= h($_POST['payer_phone'] ?? '') ?>" placeholder="6XX XXX XXX"><small data-fr="Une demande de paiement sera envoyée sur ce numéro. Gardez le téléphone à portée de main." data-en="A payment request will be sent to this number. Keep your phone nearby.">Une demande de paiement sera envoyée sur ce numéro. Gardez le téléphone à portée de main.</small></div>
     <?= csrf_field() ?>
-    <?php if (!$paymentConfigured): ?><p class="payment-unavailable" role="status" data-fr="Le paiement Fapshi sera activé après l’ajout sécurisé des identifiants renouvelés. Aucune transaction ne sera envoyée depuis cet aperçu pour le moment." data-en="Fapshi payments will be enabled after the renewed credentials are securely added. No transaction will be sent from this preview yet.">Le paiement Fapshi sera activé après l’ajout sécurisé des identifiants renouvelés. Aucune transaction ne sera envoyée depuis cet aperçu pour le moment.</p><?php endif; ?>
+    <?php if (!$paymentConfigured): ?><p class="payment-unavailable" role="status" data-fr="Le paiement est momentanément indisponible. Réessayez plus tard." data-en="Payments are temporarily unavailable. Please try again later.">Le paiement est momentanément indisponible. Réessayez plus tard.</p><?php endif; ?>
+    <?php if ($paymentConfigured && $sandboxPayments): ?><p class="payment-test-note" role="note" data-fr="Mode test : aucun débit réel ni notification sur un vrai téléphone. Utilisez un numéro de simulation correspondant à l’opérateur choisi." data-en="Test mode: no real charge or notification is sent to a real phone. Use a test number that matches the selected operator.">Mode test : aucun débit réel ni notification sur un vrai téléphone. Utilisez un numéro de simulation correspondant à l’opérateur choisi.</p><?php endif; ?>
     <button class="button" type="submit" <?= $paymentConfigured ? '' : 'disabled' ?>><span data-fr="Continuer vers le paiement" data-en="Continue to payment">Continuer vers le paiement</span><?= giga_svg('arrow') ?></button>
   </form>
   <aside class="summary-panel">

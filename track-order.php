@@ -5,16 +5,23 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     redirect('mes-commandes.php');
 }
 verifyCsrf();
-$code = strtoupper(trim((string) ($_POST['order_code'] ?? $_POST['order_reference'] ?? '')));
-$phone = (string) ($_POST['phone'] ?? $_POST['phone_number'] ?? '');
-if (!preg_match('/^GS-[A-F0-9]{10}$/', $code) || !validCameroonPhone($phone)) {
-    flash('error', 'Vérifiez la référence et le numéro utilisés pour la commande.');
+
+$phone = normalizePhone((string) ($_POST['phone_number'] ?? $_POST['phone'] ?? ''));
+if (!validCameroonPhone($phone)) {
+    unset($_SESSION['tracked_phone'], $_SESSION['tracked_order_id']);
+    flash('error', 'Saisissez un numéro camerounais valide.');
     redirect('mes-commandes.php');
 }
-$order = findOrderByCodeAndPhone($code, $phone);
-if (!$order) {
-    flash('error', 'Aucune commande ne correspond à ces informations.');
+
+$stmt = db()->prepare('SELECT id FROM orders WHERE recipient_phone = ? ORDER BY id DESC LIMIT 20');
+$stmt->execute([$phone]);
+$orderIds = array_map('intval', array_column($stmt->fetchAll(), 'id'));
+if (!$orderIds) {
+    unset($_SESSION['tracked_phone'], $_SESSION['tracked_order_id']);
+    flash('error', 'Aucune commande ne correspond à ce numéro.');
     redirect('mes-commandes.php');
 }
-$_SESSION['tracked_order_id'] = (int) $order['id'];
+
+$_SESSION['tracked_phone'] = $phone;
+$_SESSION['tracked_order_id'] = $orderIds[0];
 redirect('mes-commandes.php');

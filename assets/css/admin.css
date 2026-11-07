@@ -95,7 +95,7 @@
 .operator-pill { display:inline-flex; border-radius:999px; padding:4px 8px; color:#324058; background:#f1f4f8; font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; }
 .operator-pill.orange { background:#fff1e4; color:#bd5804; }
 .operator-pill.mtn { background:#fff9d9; color:#775e00; }
-.operator-pill.camtel { background:#e4f7fc; color:#087091; }
+.operator-pill.camtel { background:#e8eef9; color:#173f7a; }
 .admin-package-actions { display:flex; align-items:flex-start; flex-direction:column; gap:7px; flex:none; }
 .admin-package-actions form { margin:0; }
 .admin-package-actions a,.admin-package-actions button { border:0; padding:0; background:none; color:#2454c5; font:800 11px 'DM Sans',sans-serif; text-decoration:none; cursor:pointer; }

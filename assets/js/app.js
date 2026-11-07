@@ -114,6 +114,31 @@
   setLanguage(lang);
 
   var filterButtons = document.querySelectorAll('[data-filter]');
+  var filterEmpty = document.querySelector('[data-filter-empty]');
+  function updateFilterEmpty(filter) {
+    if (!filterEmpty) return;
+    var cards = document.querySelectorAll('[data-category]');
+    var visibleCount = 0;
+    cards.forEach(function (card) {
+      var visible = filter === 'all' || card.getAttribute('data-category') === filter;
+      card.hidden = !visible;
+      if (visible) visibleCount += 1;
+    });
+    filterEmpty.hidden = visibleCount > 0;
+    if (visibleCount === 0) {
+      var weekly = filter === 'weekly';
+      var title = filterEmpty.querySelector('[data-empty-title]');
+      var copy = filterEmpty.querySelector('[data-empty-copy]');
+      var titleFr = weekly ? 'Aucun forfait hebdomadaire disponible pour le moment.' : 'Aucun forfait ne correspond à cette durée pour le moment.';
+      var titleEn = weekly ? 'No weekly bundles are available right now.' : 'No bundles match this duration right now.';
+      if (title) {
+        title.setAttribute('data-fr', titleFr);
+        title.setAttribute('data-en', titleEn);
+        title.textContent = lang === 'en' ? titleEn : titleFr;
+      }
+      if (copy) copy.textContent = lang === 'en' ? 'Please try again later.' : 'Veuillez réessayer plus tard.';
+    }
+  }
   filterButtons.forEach(function (button) {
     button.addEventListener('click', function () {
       var filter = button.getAttribute('data-filter');
@@ -122,9 +147,7 @@
         item.classList.toggle('is-active', active);
         item.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
-      document.querySelectorAll('[data-category]').forEach(function (card) {
-        card.hidden = filter !== 'all' && card.getAttribute('data-category') !== filter;
-      });
+      updateFilterEmpty(filter);
     });
   });
 

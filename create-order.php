@@ -43,7 +43,7 @@ if (!in_array($paymentOperator, ['Orange Money', 'MTN Mobile Money'], true)) {
     redirect('commande.php?forfait=' . (int) $package['id']);
 }
 if (!fapshi()->isConfigured()) {
-    flash('error', 'Le paiement est momentanément indisponible. Le responsable doit d’abord configurer les identifiants Fapshi renouvelés.');
+    flash('error', 'Le paiement est momentanément indisponible. Réessayez plus tard ou contactez le vendeur.');
     redirect('commande.php?forfait=' . (int) $package['id']);
 }
 
@@ -73,6 +73,8 @@ $insert->execute([
     $now,
 ]);
 $orderId = (int) db()->lastInsertId();
+$_SESSION['tracked_phone'] = $recipientPhone;
+$_SESSION['tracked_order_id'] = $orderId;
 $externalId = 'GS' . $orderId . strtoupper(bin2hex(random_bytes(6)));
 $userId = 'gigasurf-' . $orderId;
 $update = db()->prepare('UPDATE orders SET fapshi_external_id = ?, fapshi_user_id = ?, updated_at = ? WHERE id = ?');
@@ -101,9 +103,8 @@ $status = $statusCode === 0 ? 'UNKNOWN' : 'FAILED';
 $update = db()->prepare('UPDATE orders SET payment_status = ?, updated_at = ? WHERE id = ?');
 $update->execute([$status, date('Y-m-d H:i:s'), $orderId]);
 if ($status === 'UNKNOWN') {
-    $_SESSION['tracked_order_id'] = $orderId;
     flash('warning', 'La réponse de paiement n’a pas pu être confirmée. Ne relancez pas le paiement avant d’avoir vérifié votre suivi.');
     redirect('mes-commandes.php');
 }
-flash('error', 'Fapshi n’a pas pu démarrer le paiement. Vérifiez le numéro Mobile Money et réessayez avec une nouvelle commande.');
+flash('error', 'Le paiement n’a pas pu démarrer. Vérifiez le numéro Mobile Money et réessayez avec une nouvelle commande.');
 redirect('commande.php?forfait=' . (int) $package['id']);

@@ -58,7 +58,7 @@ require __DIR__ . '/includes/header.php';
 </section>
 <section class="how-section">
   <div class="shell">
-    <div class="section-heading"><div><span class="eyebrow" data-fr="Simple comme bonjour" data-en="As easy as 1, 2, 3">Simple comme bonjour</span><h2 data-fr="Comment ça marche" data-en="How it works">Comment ça marche</h2></div></div>
+    <div class="section-heading"><div><h2 data-fr="Comment ça marche" data-en="How it works">Comment ça marche</h2></div></div>
     <div class="steps">
       <article class="step"><span class="step-number">1</span><div><h3 data-fr="Choisissez votre forfait" data-en="Choose your bundle">Choisissez votre forfait</h3><p data-fr="Comparez les offres Orange, MTN et Camtel Blue." data-en="Compare offers from Orange, MTN and Camtel Blue.">Comparez les offres Orange, MTN et Camtel Blue.</p></div></article>
       <article class="step"><span class="step-number">2</span><div><h3 data-fr="Indiquez le numéro" data-en="Enter the phone number">Indiquez le numéro</h3><p data-fr="Vérifiez soigneusement le numéro à recharger." data-en="Double-check the number you want to top up.">Vérifiez soigneusement le numéro à recharger.</p></div></article>
